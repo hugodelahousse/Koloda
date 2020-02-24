@@ -64,7 +64,7 @@ public protocol KolodaViewDelegate: class {
     func koloda(_ koloda: KolodaView, shouldDragCardAt index: Int ) -> Bool
     func kolodaPanBegan(_ koloda: KolodaView, card: DraggableCardView)
     func kolodaPanFinished(_ koloda: KolodaView, card: DraggableCardView)
-    
+    func kolodaShouldNormalizePercentage(_ koloda: KolodaView, card: DraggableCardView) -> Bool
 }
 
 public extension KolodaViewDelegate {
@@ -84,6 +84,7 @@ public extension KolodaViewDelegate {
     func koloda(_ koloda: KolodaView, shouldDragCardAt index: Int ) -> Bool { return true }
     func kolodaPanBegan(_ koloda: KolodaView, card: DraggableCardView) {}
     func kolodaPanFinished(_ koloda: KolodaView, card: DraggableCardView) {}
+    func kolodaShouldNormalizePercentage(_ koloda: KolodaView, card: DraggableCardView) -> Bool { return true }
 }
 
 open class KolodaView: UIView, DraggableCardDelegate {
@@ -391,6 +392,10 @@ open class KolodaView: UIView, DraggableCardDelegate {
 
     func card(cardPanFinished card: DraggableCardView) {
         delegate?.kolodaPanFinished(self, card: card)
+    }
+    
+    func card(shouldNormalizePercentage card: DraggableCardView) -> Bool {
+        return delegate?.kolodaShouldNormalizePercentage(self, card: card) ?? true
     }
 
     // MARK: Private

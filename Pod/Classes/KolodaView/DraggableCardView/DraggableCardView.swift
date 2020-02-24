@@ -29,6 +29,7 @@ protocol DraggableCardDelegate: class {
     func card(cardSwipeSpeed card: DraggableCardView) -> DragSpeed
     func card(cardPanBegan card: DraggableCardView)
     func card(cardPanFinished card: DraggableCardView)
+    func card(shouldNormalizePercentage card: DraggableCardView) -> Bool
 }
 
 //Drag animation constants
@@ -261,7 +262,9 @@ public class DraggableCardView: UIView, UIGestureRecognizerDelegate {
             updateOverlayWithFinishPercent(percentage, direction:dragDirection)
             if let dragDirection = dragDirection {
                 //100% - for proportion
-                delegate?.card(self, wasDraggedWithFinishPercentage: min(abs(100 * percentage), 100), inDirection: dragDirection)
+                let shouldNormalizePercentage = delegate?.card(shouldNormalizePercentage: self) ?? true
+                let percent = shouldNormalizePercentage ? min(abs(100 * percentage), 100) : percentage
+                delegate?.card(self, wasDraggedWithFinishPercentage: percent, inDirection: dragDirection)
             }
             
         case .ended:
